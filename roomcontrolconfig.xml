@@ -1,11 +1,11 @@
 <Extensions>
   <Version>1.5</Version>
   <Panel>
-    <PanelId>standby</PanelId>
+    <PanelId>help</PanelId>
     <Type>Statusbar</Type>
-    <Icon>Power</Icon>
-    <Order>4</Order>
-    <Color>#FFB400</Color>
-    <Name>Veille</Name>
+    <Icon>Help</Icon>
+    <Order>3</Order>
+    <Color>#FF3D67</Color>
+    <Name>Aide</Name>
   </Panel>
 </Extensions>
