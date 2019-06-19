@@ -65,13 +65,15 @@ xapi.event.on('UserInterface Message TextInput Response', (event) => {
           }).catch((error) => { console.error(error); });
           
           xapi.status.get('Diagnostics Message').then(list => {
-            let diagnostics = "";
+            let diagnostics = "\n\n";
             
             for (let element in list) {
               diagnostics += `Diagnostic ${(element)} => description : **${JSON.stringify(list[element].Description)}**\n\n`;
             }
             
-            msg = `-----\n\n-----\n\n**Probleme**\n\nCodec _${systemInfo.systemName}_\n\nIP : ${systemInfo.ip}\n\nSIP : ${systemInfo.sip}\n\nDescription : **${event.Text}**\n\n-----\n\n`;
+            diagnostics += "-----\n\n"
+            
+            msg = `-----\n\n**Probleme #${Math.round(Math.random() * 10000)}**\n\nCodec _${systemInfo.systemName}_\n\nIP : ${systemInfo.ip}\n\nSIP : ${systemInfo.sip}\n\nDescription : **${event.Text}**`;
             
             push(msg);
             
