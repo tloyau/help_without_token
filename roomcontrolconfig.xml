@@ -1,0 +1,11 @@
+<Extensions>
+  <Version>1.5</Version>
+  <Panel>
+    <PanelId>standby</PanelId>
+    <Type>Statusbar</Type>
+    <Icon>Power</Icon>
+    <Order>4</Order>
+    <Color>#FFB400</Color>
+    <Name>Veille</Name>
+  </Panel>
+</Extensions>
