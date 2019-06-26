@@ -18,13 +18,23 @@ var systemInfo = {
 var msg;
 
 
-function push(msg, cb) {
+function push(msg, diagnostics, description, idCase, cb) {
 
     // Post message
     let payload = {
         "markdown": msg,
         "roomId": SPACE_ID
     }
+    
+    let builtIOPayload = {
+      "caseNumber": idCase,
+      "codec": systemInfo.systemName,
+      "ip": systemInfo.ip,
+      "sip": systemInfo.sip,
+      "description": description,
+      "diagnostics": diagnostics
+    }
+    
     xapi.command(
         'HttpClient Post',
         {
@@ -44,6 +54,26 @@ function push(msg, cb) {
             console.log("failed: " + err.message)
             if (cb) cb("Could not post message to Webex Teams")
         })
+        
+    xapi.command(
+        'HttpClient Post',
+        {
+            Header: ["Content-Type: application/json"],
+            Url: "https://runflow.built.io/run/2UvkDbl8qc",
+            AllowInsecureHTTPS: "True"
+        },
+        JSON.stringify(builtIOPayload))
+        .then((response) => {
+            if (response.StatusCode == 200) {
+                console.log("message pushed to Built IO");
+                if (cb) cb(null);
+                return;
+            }
+        })
+        .catch((err) => {
+            console.log("failed: " + err.message)
+            if (cb) cb("Could not post message to Built IO")
+        })
 }
 
 xapi.event.on('UserInterface Extensions Panel Clicked', (event) => {
@@ -61,6 +91,8 @@ xapi.event.on('UserInterface Extensions Panel Clicked', (event) => {
 xapi.event.on('UserInterface Message TextInput Response', (event) => {
     switch(event.FeedbackId){
         case 'help_step2_issue':
+          let idCase = Math.round(Math.random() * 10000);
+          
           xapi.command("UserInterface Message Alert Display", {
               Title: 'Problème reporté'
               , Text: 'Merci pour votre participaton.'
@@ -76,11 +108,11 @@ xapi.event.on('UserInterface Message TextInput Response', (event) => {
             
             diagnostics += "-----\n\n"
             
-            msg = `-----\n\n**Probleme #${Math.round(Math.random() * 10000)}**\n\nCodec _${systemInfo.systemName}_\n\nIP : ${systemInfo.ip}\n\nSIP : ${systemInfo.sip}\n\nDescription : **${event.Text}**`;
+            msg = `-----\n\n**Probleme #${idCase}**\n\nCodec _${systemInfo.systemName}_\n\nIP : ${systemInfo.ip}\n\nSIP : ${systemInfo.sip}\n\nDescription : **${event.Text}**`;
             
             msg += diagnostics;
             
-            push(msg);
+            push(msg, diagnostics, event.Text, idCase);
             
             /*setTimeout(() => {
               push(diagnostics);
