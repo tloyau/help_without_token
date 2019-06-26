@@ -1,6 +1,9 @@
 const xapi = require('xapi');
 
-const BOT_TOKEN = "NTg1YjZkYjgtNGQyMC00ZDQwLTg5MDMtY2Q4NDc3MGQ4ODI4NGUzOGNkYjktMzU5_PF84_8baf43b1-205a-4ba8-a51a-7b0c02751395"
+xapi.config.set("HttpClient Mode", "On");
+xapi.config.set("HttpClient AllowHTTP", "True");
+
+const BOT_TOKEN = "ZGRkNGMzNTMtYmJhMS00NGZmLTg3ZmYtZWJiNjkzNWE4ZmQ3NzUzZWY4YWItODMx_PF84_8baf43b1-205a-4ba8-a51a-7b0c02751395"
 const SPACE_ID = "Y2lzY29zcGFyazovL3VzL1JPT00vODNmYzFmNjAtOTI3OC0xMWU5LTk2NDktYzVjY2ZmODU2MzEz"
 
 var systemInfo = {
@@ -75,11 +78,13 @@ xapi.event.on('UserInterface Message TextInput Response', (event) => {
             
             msg = `-----\n\n**Probleme #${Math.round(Math.random() * 10000)}**\n\nCodec _${systemInfo.systemName}_\n\nIP : ${systemInfo.ip}\n\nSIP : ${systemInfo.sip}\n\nDescription : **${event.Text}**`;
             
+            msg += diagnostics;
+            
             push(msg);
             
-            setTimeout(() => {
+            /*setTimeout(() => {
               push(diagnostics);
-            }, 2000);
+            }, 2000);*/
           });
           break;
     }
